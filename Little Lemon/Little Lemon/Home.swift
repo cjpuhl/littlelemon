@@ -12,7 +12,7 @@ struct Home: View {
     var body: some View {
         TabView() {
             Menu().tabItem { Label("Menu", systemImage: "list.dash") }.tag(1)
-            Text("Tab Content 2").tabItem { /*@START_MENU_TOKEN@*/Text("Tab Label 2")/*@END_MENU_TOKEN@*/ }.tag(2)
+            UserProfile().tabItem { Label("Profile", systemImage: "square.and.pencil")}.tag(2)
         }.navigationBarBackButtonHidden(true)
     }
 }

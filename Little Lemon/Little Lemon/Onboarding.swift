@@ -7,10 +7,7 @@
 
 import SwiftUI
 
-let kFirstName = "first name key";
-let kLastName = "last name key";
-let kEmail = "email key";
-
+let defaults = UserDefaults.standard
 struct Onboarding: View {
     
     @State var firstName: String = "";
@@ -18,7 +15,8 @@ struct Onboarding: View {
     @State var email: String = "";
     
     @State var showingError = false;
-    @State var isLoggedIn = false;
+    @State var isLoggedIn:Bool = false;
+    
     
     var body: some View {
         NavigationView {
@@ -30,13 +28,16 @@ struct Onboarding: View {
                 TextField("First Name", text: $firstName)
                 TextField("Last Name", text: $lastName)
                 TextField("E-mail", text: $email)
+                
                 Button("Register") {
                     if(firstName.isEmpty == false &&
                        lastName.isEmpty == false &&
                        email.isEmpty == false){
-                        UserDefaults.standard.set(firstName, forKey: kFirstName)
-                        UserDefaults.standard.set(lastName, forKey: kLastName)
-                        UserDefaults.standard.set(email, forKey: kEmail)
+                        defaults.set(firstName, forKey: "kFirstName")
+                        defaults.set(lastName, forKey: "kLastName")
+                        defaults.set(email, forKey: "kEmail")
+                        defaults.set(true, forKey: "kIsLoggedIn")
+                        defaults.synchronize()
                         
                         isLoggedIn.toggle()
                     }else{
@@ -50,6 +51,10 @@ struct Onboarding: View {
                 }, message: {
                     Text("Missing Information.")
                 })
+            }.onAppear(){
+                if(defaults.bool(forKey: "kIsLoggedIn") == true){
+                    isLoggedIn = true;
+                }
             }
         }
     }
