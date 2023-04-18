@@ -10,12 +10,23 @@ import SwiftUI
 struct Menu: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State var searchText = ""
-
+    @State private var menuLoaded = false
+    
     var body: some View {
         VStack{
-            Text("Title");
-            Text("Location");
-            Text("Short Description");
+            HStack{
+                VStack(alignment: .leading){
+                    Text("Little lemon").font(.title)
+                    Text("Chicago").font(.title2);
+                    Text("We are a family owned Mediterranean restaurant, focused on traditional recipes served with a modern twist.");
+                }
+                Spacer()
+                Image("Hero")
+                    .resizable()
+                    .frame(width: 200, height: 200)
+                
+            }
+            Divider()
             
             TextField("Search Menu", text: $searchText)
             
@@ -47,8 +58,13 @@ struct Menu: View {
                 }
             }
         }
-        .onAppear(){
-            MenuList.getMenuData(viewContext: viewContext)
+        .task {
+                        if !menuLoaded {
+                            await MenuList.getMenuData(viewContext: viewContext)
+                        }
+                        menuLoaded = true
+        /*.onAppear(){
+            MenuList.getMenuData(viewContext: viewContext)*/
         }
     }
     private func buildPredicate() -> NSPredicate {
